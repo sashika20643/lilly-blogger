@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\http\Controllers\CatagoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +16,20 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::match(['get', 'post'], '/register', function () {
+    return redirect('/login');
+});
+
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified'
+])->prefix('dashboard')->group(function () {
+    Route::get('/', function () {
+        return view('Admin.pages.index');
+    })->name('dashboard');
+    Route::resource('/catagory', CatagoryController::class);
 });
